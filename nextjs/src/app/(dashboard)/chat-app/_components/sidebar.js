@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Button } from "@/components/ui/button";
 import { AlertDialog,AlertDialogTrigger,AlertDialogContent } from "@/components/ui/alert-dialog";
 import AddFriend from "../../add-friend";
+import Image from "next/image";
 const SideBar = ({ user }) => {
   const [friends, setFriends] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
