@@ -1,36 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
-import { UserService } from './user.service';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcryptjs';
 
-@Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@Injectable()
+export class UserService {
+  constructor(private readonly prisma: PrismaService) {}  // ✅ Inject PrismaService
 
-  @Post('sign-up')
-  @UsePipes(new ValidationPipe({ whitelist: true }))  // ✅ Enforce validation
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  // Create a new user
+  async create(createUserDto: CreateUserDto) {
+    const { password, ...userData } = createUserDto;
+    
+    // Hash password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    return this.prisma.user.create({
+      data: {
+        ...userData,
+        password: hashedPassword,  // ✅ Add hashed password
+      },
+    });
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  // Find all users
+  async findAll() {
+    return this.prisma.user.findMany();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {  
-    return this.userService.findOne(id);
+  // Find a user by ID
+  async findOne(id: string) {
+    return this.prisma.user.findUnique({ where: { id } });
   }
 
-  @Patch(':id')
-  @UsePipes(new ValidationPipe({ whitelist: true }))  // ✅ Validate updates
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {  
-    return this.userService.update(id, updateUserDto);
+  // Update a user
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {  
-    return this.userService.remove(id);
+  // Remove a user
+  async remove(id: string) {
+    return this.prisma.user.delete({
+      where: { id },
+    });
   }
 }
