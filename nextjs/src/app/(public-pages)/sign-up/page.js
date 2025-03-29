@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 export default function SignInPage() {
+  const signUpUrl = process.env.NEXT_PUBLIC_SIGN_UP ;
   const router = useRouter()
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +26,7 @@ export default function SignInPage() {
       return;
     }
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+      const response = await fetch(`${signUpUrl}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
