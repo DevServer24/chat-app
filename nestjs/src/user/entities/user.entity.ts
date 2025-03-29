@@ -1,22 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Friendship } from '../../friendship/entities/friendship.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid') // Automatically generates a UUID
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  name: string;
-
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  password: string; // Store hashed password
+  @Column()
+  password: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  image?: string;
+  @OneToMany(() => Friendship, (friendship) => friendship.user1)
+  friends1: Friendship[];
 
-  @Column({ type: 'timestamp', nullable: true })
-  emailVerified?: Date;
+  @OneToMany(() => Friendship, (friendship) => friendship.user2)
+  friends2: Friendship[];
 }
