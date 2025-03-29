@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
-export class UserService {
+export class UserController {
   constructor(private readonly prisma: PrismaService) {}  // ✅ Inject PrismaService
 
   // Create a new user
