@@ -1,5 +1,5 @@
 [build]
-  base = "nextjs"
+  base = "nextjs" 
   command = "NEXT_PUBLIC_ESLINT_IGNORE=true npm run build"
   publish = "nextjs/.next"
 
