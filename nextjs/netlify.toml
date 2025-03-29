@@ -1,0 +1,7 @@
+[build]
+  base = "nextjs"  # Change this if your frontend folder has a different name
+  command = "npm run build"
+  publish = "nextjs/.next"  # Use "nextjs/out" if using `next export`
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
