@@ -1,7 +1,7 @@
 [build]
   base = "nextjs"
   command = "NEXT_PUBLIC_ESLINT_IGNORE=true npm run build"
-  publish = "nextjs/.next"
+  publish = ".next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
