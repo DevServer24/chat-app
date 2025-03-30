@@ -8,23 +8,24 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  email         String?   @unique
-  name          String?
-  image         String?
-  emailVerified DateTime? 
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  email    String? @unique
+  name     String?
+  avatar   String?
+  password String?
+  auth0Id  String? @unique
 
-  accounts      Account[] @relation("UserAccounts") 
-  sessions      Session[] @relation("UserSessions") 
-  friends1      Friendship[]   @relation("UserFriend1")
-  friends2      Friendship[]   @relation("UserFriend2")
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]      @relation("UserAccounts")
+  sessions      Session[]      @relation("UserSessions")
+  friends1      Friendship[]   @relation("UserAsFriend1")
+  friends2      Friendship[]   @relation("UserAsFriend2")
   chats         ChatMember[]   @relation("UserChatMembers")
   messages      Message[]      @relation("UserMessages")
   notifications Notification[] @relation("UserNotifications")
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  password String?
 }
 
 model Notification {
@@ -41,8 +42,8 @@ model Friendship {
   user1Id String @db.ObjectId
   user2Id String @db.ObjectId
 
-  user1 User @relation("UserFriend1", fields: [user1Id], references: [id])
-  user2 User @relation("UserFriend2", fields: [user2Id], references: [id])
+  user1 User @relation("UserAsFriend1", fields: [user1Id], references: [id])
+  user2 User @relation("UserAsFriend2", fields: [user2Id], references: [id])
 }
 
 model Chat {
@@ -52,15 +53,18 @@ model Chat {
   createdAt DateTime     @default(now())
 }
 
+
 model ChatMember {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
   chatId String @db.ObjectId
 
-  user     User     @relation("UserChatMembers", fields: [userId], references: [id])
-  chat     Chat     @relation("ChatMembers", fields: [chatId], references: [id])
+  user User @relation("UserChatMembers", fields: [userId], references: [id])
+  chat Chat @relation("ChatMembers", fields: [chatId], references: [id])
+
   joinedAt DateTime @default(now())
 }
+
 
 model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -72,6 +76,7 @@ model Message {
   chat   Chat @relation("ChatMessages", fields: [chatId], references: [id])
   sender User @relation("UserMessages", fields: [senderId], references: [id])
 }
+
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId

@@ -23,7 +23,6 @@ export class FriendshipGateway {
       where: { id },
     });
   }
-
   @SubscribeMessage('updateFriendship')
   async update(@MessageBody() updateFriendshipDto: UpdateFriendshipDto) {
     return prisma.friendship.update({

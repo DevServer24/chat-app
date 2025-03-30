@@ -15,7 +15,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  image?: string;
+  avatar?: string; // ✅ Renamed from `image` to `avatar`
 
   @IsOptional()
   emailVerified?: Date;

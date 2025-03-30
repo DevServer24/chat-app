@@ -1,9 +1,11 @@
-import Home from "./(public-pages)/home/page";
+import { MainHero } from "@/components/ui/mainHero";
+import { MainNavbar } from "@/components/ui/mainNavbar";
 
-export default function App() {
+export default function App(){
   return(
-    <div>
-      <Home />
+    <div className="min-h-screen bg-black text-white">
+      <MainNavbar/>
+      <MainHero />
     </div>
   )
 }

@@ -6,7 +6,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  @Post('sync')
+  @UsePipes(new ValidationPipe({ whitelist: true }))  
+  async syncUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.findOrCreateUser(createUserDto);
+  }
   @Post('sign-up')
   @UsePipes(new ValidationPipe({ whitelist: true }))  // ✅ Enforce validation
   create(@Body() createUserDto: CreateUserDto) {

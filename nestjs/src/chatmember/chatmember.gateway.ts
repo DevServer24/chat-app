@@ -33,7 +33,7 @@ export class ChatmemberGateway {
       data: updateChatmemberDto,
     });
   }
-
+  
   async remove(id: string) {
     return this.prisma.chatMember.delete({ where: { id } });
   }

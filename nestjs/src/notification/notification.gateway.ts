@@ -2,16 +2,13 @@ import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websock
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
-
 @WebSocketGateway()
 export class NotificationGateway {
   constructor(private readonly notificationService: NotificationService) {}
-
   @SubscribeMessage('createNotification')
   create(@MessageBody() createNotificationDto: CreateNotificationDto) {
     return this.notificationService.create(createNotificationDto);
   }
-
   @SubscribeMessage('findAllNotifications')
   findAll() {
     return this.notificationService.findAll();
