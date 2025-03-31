@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react"
 import { Button } from "./button"
+import Link from "next/link"
 export const MainNavbar =() =>{
   return(
     <div className="container mx-auto px-4 py-6 flex justify-between items-center">
@@ -8,23 +9,10 @@ export const MainNavbar =() =>{
           <span className="text-2xl font-bold">ChatNow</span>
         </div>
         <div className="hidden md:flex gap-8">
-          <a href="#features" className="hover:text-green-400 transition-colors">
-            Features
-          </a>
-          <a href="#testimonials" className="hover:text-green-400 transition-colors">
-            Testimonials
-          </a>
-          <a href="#pricing" className="hover:text-green-400 transition-colors">
-            Pricing
-          </a>
+         
         </div>
-        
-
-
-
-
         <div>
-          <Button className="bg-green-500 hover:bg-green-600 text-black font-medium">Sign Up Free</Button>
+          <Link href={'/sign-up'}><Button className="bg-green-500 hover:bg-green-600 text-black font-medium">Sign Up Free</Button></Link>
         </div>
     </div>
   )

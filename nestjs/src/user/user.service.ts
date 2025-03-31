@@ -5,21 +5,27 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
-  // Sync user (Find or Create)
+  constructor(private readonly prisma: PrismaService) { }
   async findOrCreateUser(createUserDto: CreateUserDto) {
-    const { email, name, avatar } = createUserDto;
+    const { email, name, avatar, password } = createUserDto;
+  
+    if (!password) {
+      throw new Error("Password is required for user creation.");
+    }
+  
     let user = await this.prisma.user.findUnique({ where: { email } });
-
+  
     if (!user) {
+      const hashedPassword = await bcrypt.hash(password, 10);
       user = await this.prisma.user.create({
-        data: { email, name, avatar },
+        data: { email, name, avatar, password: hashedPassword },
       });
     }
-
+  
     return user;
   }
-
+  
+  
   // Create a new user
   async create(createUserDto: CreateUserDto) {
     const { password, ...userData } = createUserDto;
@@ -32,13 +38,9 @@ export class UserService {
       },
     });
   }
-
-  // Find all users
   async findAll() {
     return await this.prisma.user.findMany();
   }
-
-  // Find a user by ID
   async findOne(id: string) {
     return await this.prisma.user.findUnique({ where: { id } });
   }

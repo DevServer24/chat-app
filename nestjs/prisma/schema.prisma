@@ -9,12 +9,10 @@ datasource db {
 
 model User {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  email    String? @unique
-  name     String?
+  email    String  @unique
+  name     String
   avatar   String?
-  password String?
-  auth0Id  String? @unique
-
+  password String
   emailVerified DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -27,6 +25,7 @@ model User {
   messages      Message[]      @relation("UserMessages")
   notifications Notification[] @relation("UserNotifications")
 }
+
 
 model Notification {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
