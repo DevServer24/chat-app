@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,36 +6,24 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Post('sync')
-  @UsePipes(new ValidationPipe({ whitelist: true }))  
-  async syncUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.findOrCreateUser(createUserDto);
-  }
+
   @Post('sign-up')
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log("Received signup data:", createUserDto); // 🔍 Debug input
-    return this.userService.create(createUserDto);
-  }
-  
-  @Get('get-all')
-  findAll() {
-    return this.userService.findAll();
-  }
+    console.log("✅ Received signup data:", createUserDto);
 
-  @Get('search/:id')
-  findOne(@Param('id') id: string) {  
-    return this.userService.findOne(id);
-  }
+    try {
+      const user = await this.userService.create(createUserDto);
+      return { message: "Signup successful", user };
+    } catch (error) {
+      console.error("❌ Signup error:", error);
 
-  @Patch(':id')
-  @UsePipes(new ValidationPipe({ whitelist: true }))  // ✅ Validate updates
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {  
-    return this.userService.update(id, updateUserDto);
-  }
+      if (error.code === 'P2002') {
+        // Prisma error: unique constraint failed
+        throw new BadRequestException("Email is already in use.");
+      }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {  
-    return this.userService.remove(id);
+      throw new InternalServerErrorException("Signup failed. Please try again.");
+    }
   }
 }

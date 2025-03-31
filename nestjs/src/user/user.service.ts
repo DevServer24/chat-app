@@ -7,16 +7,12 @@ import * as bcrypt from 'bcryptjs';
 export class UserService {
   constructor(private readonly prisma: PrismaService) { }
   async findOrCreateUser(createUserDto: CreateUserDto) {
-    const { email, name, avatar, password } = createUserDto;
-  
-    if (!password) {
-      throw new Error("Password is required for user creation.");
-    }
+    const { email, name, avatar, password } = createUserDto; // ✅ Added password
   
     let user = await this.prisma.user.findUnique({ where: { email } });
   
     if (!user) {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10); // ✅ Hash password
       user = await this.prisma.user.create({
         data: { email, name, avatar, password: hashedPassword },
       });
@@ -24,6 +20,7 @@ export class UserService {
   
     return user;
   }
+  
   
   
   // Create a new user
