@@ -3,14 +3,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 export default function SignUp() {
+const router = useRouter()
   const [data, setData] = useState({
     email: "",
     name: "",
     password: "",
-    avatar: "",
+
   });
 
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -41,6 +43,8 @@ export default function SignUp() {
 
       console.log("Signup successful:", result);
       alert("Sign up successfully!");
+      localStorage.setItem("jwtToken", result.token);
+      router.push("/dashboard");
     } catch (error) {
       console.error("Signup Error:", error.message);
       alert(error.message);
@@ -64,7 +68,7 @@ export default function SignUp() {
             <p className="text-sm text-muted-foreground">Enter your information below to create your account</p>
           </div>
 
-          <Input type="text" name="avatar" placeholder="Avatar URL" onChange={handleChange} />
+         
           <Input type="text" name="name" placeholder="Name" onChange={handleChange} />
           <Input type="email" name="email" placeholder="Email" onChange={handleChange} />
           <Input type="password" name="password" placeholder="Password" onChange={handleChange} />
@@ -80,29 +84,14 @@ export default function SignUp() {
             />
           </div>
 
-          <Button className="w-full" type="submit">
+          <Button className="w-full cursor-pointer transition duration-500" type="submit">
             Create account
           </Button>
         </form>
 
         <div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="w-full">
-              Google
-            </Button>
-            <Button variant="outline" className="w-full">
-              GitHub
-            </Button>
-          </div>
+       
+         
 
           <p className="px-8 text-center text-sm text-muted-foreground">
             By clicking continue, you agree to our{" "}
@@ -118,7 +107,7 @@ export default function SignUp() {
 
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="underline underline-offset-4 hover:text-primary">
+            <Link href="/sign-in" className="underline underline-offset-4 hover:text-primary">
               Sign in
             </Link>
           </p>

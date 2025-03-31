@@ -1,7 +1,6 @@
 import { MainFeatures } from "@/components/mainFeatures";
 import { MainHero } from "@/components/ui/mainHero";
 import { MainNavbar } from "@/components/ui/mainNavbar";
-
 export default function App(){
   console.log(process.env.NEXT_PUBLIC_SIGN_UP)
   return(

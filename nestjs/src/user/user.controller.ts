@@ -3,11 +3,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginDto } from './dto/login-in-user.dto'; // Ensure correct file name
-
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @Post('sign-up')
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async create(@Body() createUserDto: CreateUserDto) {
@@ -33,7 +31,7 @@ export class UserController {
     }
   }
 
-  @Get()
+  @Get('get-all')
   async findAll() {
     return this.userService.findAll();
   }
